@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ####################################################################################################
-# 1. Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'.
+# 1. Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'
 
 # create a new user 'awan' with password 'buayakecil'
  useradd \
@@ -14,7 +14,7 @@
 ####################################################################################################
 # one and for all
 
-apt-get -y update
+apt-get update
 apt-get install -y python-software-properties  # for add-apt-repository
 apt-get install -y language-pack-en-base
 apt-get install -y zip unzip git
@@ -60,8 +60,8 @@ service nginx reload
 # install php
 sudo add-apt-repository ppa:ondrej/php
 sudo apt-get install -y php7.1 php7.1-fpm php7.1-mysql php7.1-cli php7.1-zip php7.1-gd
-sudo apt-get install -y mcrypt php7.1-mcrypt
-sudo apt-get install -y php7.1-mbstring php7.1-xml --force-yes
+sudo apt-get install -y php7.1-mcrypt mcrypt
+sudo apt-get install -y php7.1-mbstring php7.1-xml
 sudo apt-get install -y php7.1-curl php7.1-json
 
 # install mysql
@@ -73,8 +73,8 @@ curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
 # configure project
-sudo chown -R :www-data /var/www/laravel
-sudo chmod -R 775 /var/www/laravel/storage
+#sudo chown -R :www-data /var/www/laravel
+#sudo chmod -R 775 /var/www/laravel/storage
 
 ####################################################################################################
 
