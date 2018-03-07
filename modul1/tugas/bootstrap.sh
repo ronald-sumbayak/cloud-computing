@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 ####################################################################################################
 # 1. Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'.
 
@@ -12,7 +11,6 @@
 
 ####################################################################################################
 
-
 ####################################################################################################
 # one and for all
 
@@ -22,7 +20,6 @@ apt-get install -y language-pack-en-base
 apt-get install -y zip unzip git
 
 ####################################################################################################
-
 
 ####################################################################################################
 # 2. Buat vagrant virtualbox dan lakukan provisioning install Phoenix Web Framework
@@ -47,7 +44,6 @@ mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_
 mix phx.new /home/vagrant/hello
 
 ####################################################################################################
-
 
 ####################################################################################################
 # 3. Buat vagrant virtualbox dan lakukan provisioning install: php, mysql, composer, nginx
@@ -81,7 +77,6 @@ sudo chown -R :www-data /var/www/laravel
 sudo chmod -R 775 /var/www/laravel/storage
 
 ####################################################################################################
-
 
 ####################################################################################################
 # 4. Buat vagrant virtualbox dan lakukan provisioning install: squid proxy, bind9
