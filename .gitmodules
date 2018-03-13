@@ -1,0 +1,3 @@
+[submodule "modul1/tugas/pelatihan-laravel"]
+	path = modul1/tugas/pelatihan-laravel
+	url = git@github.com:fathoniadi/pelatihan-laravel.git
