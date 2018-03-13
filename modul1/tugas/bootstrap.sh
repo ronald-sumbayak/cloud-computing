@@ -31,6 +31,7 @@ wget https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz
 tar xf node-v8.10.0-linux-x64.tar.xz
 sudo mkdir /usr/local/lib/nodejs
 sudo mv node-v8.10.0-linux-x64 /usr/local/lib/nodejs
+sudo mv /usr/local/lib/nodejs/node-v8.10.0-linux-x64 /usr/local/lib/nodejs/node-v8.10.0
 rm -r node-v8.10.0-linux-x64.tar.xz
 export NODE_HOME=/usr/local/lib/nodejs/node-v8.10.0
 export PATH=$NODE_HOME/bin:$PATH
