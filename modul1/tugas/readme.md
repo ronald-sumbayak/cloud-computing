@@ -1,27 +1,44 @@
-# cloud-computing
-[KI141406] Cloud Computing
+# Vagrant
 
-[Komputasi Awan – Vagrant]
+- Box: [ubuntu/xenial64](https://app.vagrantup.com/ubuntu/boxes/xenial64)
+- [Vagrantfile](#vagrantfile)
+- [Provision](bootstrap.sh)
 
-1. Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'.
-- Buat file provisioning terlebih dahulu. Dalam pengerjaan ini, kami memasukkan perintah:
-	nano bootstrap.sh				
-- Masukkan syntax untuk membuat user “awan” dan password “buayakecil” :
-  sudo useradd \
-  awan \
-  -p $(echo buayakecil | openssl passwd -1 -stdin) \
-  -d /home/awan -m
+### [Vagrantfile](Vagrantfile)
+```ruby
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
 
-- Simpan file bootstrap.sh
+Vagrant.configure('2') do |config|
+  config.vm.box = 'ubuntu/xenial64'
+  config.vm.box_check_update = false
+  config.vm.network 'forwarded_port', guest: 80, host: 8080
+  config.vm.network 'forwarded_port', guest: 3306, host: 6969
+  config.vm.network 'forwarded_port', guest: 4000, host: 12000
+  config.vm.network 'forwarded_port', guest: 8000, host: 16000
+  config.vm.synced_folder 'pelatihan-laravel', '/var/www/web'
+  config.vm.provision 'shell', path: 'bootstrap.sh', privileged: false
 
-- Jalankan perintah :
-	vagrant provision
-	vagrant up
-	vagrant ssh
+  config.vm.provider('virtualbox') do |vb|
+    vb.memory = 512
+    vb.cpus = 1
+  end
+end
+```
 
-- Lalu masukkan perintah untuk login menggunakan user "awan:
-	su - awan
-	(masukkan password= buayakecil)
+### Soal
+1. Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'
+
+    ```sh
+    sudo useradd \
+        awan \
+        -p $(echo buayakecil | openssl passwd -1 -stdin) \
+        -d /home/awan -m
+    ```
+    
+    did it work?
+
+    ![check_user_awan](assets/check_user_awan.png)
 
 2. Buat vagrant virtualbox dan lakukan provisioning install Phoenix Web Framework
 - Buka file bootstrap.sh, lalu tambahkan perintah untuk menginstall Erlang/OTP platform (bahasa) dan Phoenix:
@@ -96,11 +113,12 @@
 
 - Untuk memastikan apakah nginx sudah terinstall, buka localhost:port pada browser. Jika muncul kalimat "Welcome to nginx!", berarti nginx berhasil terinstall
 
-4 Buat vagrant virtualbox dan lakukan provisioning install: squid-proxy, bind9
+4. Buat vagrant virtualbox dan lakukan provisioning install: squid-proxy, bind9
 Buka file bootsrap.sh, lalu tambahkan:
-```bash
+```sh
 # install squid-proxy
-apt-get install -y -f squid
+sudo apt-get install -y -f squid
+
 # install bind9
-apt-get install -y -f bind9
+sudo apt-get install -y -f bind9
 ```

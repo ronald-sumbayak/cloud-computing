@@ -67,6 +67,7 @@ mix ecto.create
 # install php
 sudo apt-get -y -f install python-software-properties software-properties-common
 sudo apt-add-repository -y ppa:ondrej/php
+sudo apt-get update
 sudo apt-get -y -f install php7.2
 sudo apt-get -y -f install php7.2-fpm php7.2-cgi
 sudo apt-get -y -f install php7.2-mysql php7.2-mbstring php7.2-tokenizer php7.2-xml php7.2-ctype php7.2-json
