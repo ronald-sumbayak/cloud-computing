@@ -29,6 +29,8 @@ end
 ### Soal
 1. Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'
 
+	Menggunakan command useradd. Opsi -p akan menerima text password yang harus sudah di-hash. Opsi -d menentukan home directory dari user yang akan dibuat (default `/` jika tidak di-set)
+
     ```sh
     sudo useradd \
         awan \
@@ -45,7 +47,7 @@ end
 	Beberapa packages memerlukan config locale menggunakan UTF-8. Hal itu bisa dilakukan dengan:
 
 	```sh
-	locale-gen en_US.UTF-8
+	sudo locale-gen en_US.UTF-8
 	sudo dpkg-reconfigure locales
 	```
 	
@@ -65,7 +67,8 @@ end
 	wget https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz
 	tar xf node-v8.10.0-linux-x64.tar.xz
 	sudo mkdir /usr/local/lib/nodejs
-	sudo mv node-v8.10.0-linux-x64 /usr/local/lib/nodejs/node-v8.10.0
+	sudo mv node-v8.10.0-linux-x64 /usr/local/lib/nodejs
+	sudo mv /usr/local/lib/nodejs/node-v8.10.0-linux-x64 /usr/local/lib/nodejs/node-v8.10.0
 	rm -r node-v8.10.0-linux-x64.tar.xz
 	export NODE_HOME=/usr/local/lib/nodejs/node-v8.10.0
 	export PATH=$NODE_HOME/bin:$PATH
@@ -80,14 +83,16 @@ end
 	### Test Phoenix Web Framework
 	Buat project baru
 	```sh
-	mix phx.new /home/vagrant/hello
+	echo Y | mix phx.new /home/vagrant/hello
 	```
 
     Install assets dan dependencies
 	```sh
 	cd hello
+	mix local.hex --force
 	mix deps.get
-	cd hello/assets
+
+	cd assets
 	npm install
 	node node_modules/brunch/bin/brunch build
 	```
@@ -107,15 +112,11 @@ end
 	```sh
 	mix phx.server
 	```
-	![check_phoenix_running](assets/check_phoenix_running.png)
 
 	Pada vagrantfile sudah diset port forward dari 4000 guest ke 12000 host
 	```ruby
 	config.vm.network 'forwarded_port', guest: 4000, host: 12000
 	```
-
-	Hasil
-	![check_phoenix](assets/check_phoenix.png)
 
 3. Buat vagrant virtualbox dan lakukan provisioning install: php, mysql, composer, nginx
 
@@ -145,7 +146,7 @@ end
 	composer global require "laravel/installer"
 	```
 
-	Install nginx
+	Install nginx. Karena secara default apache sudah terinstall pada box ubuntu/xenial64, maka harus dihapus dulu sebelum menginstall nginx
 	```sh
 	sudo apt-get -y --purge apache2
 	sudo apt-get -y install nginx

@@ -15,7 +15,8 @@
 # 2. Buat vagrant virtualbox dan lakukan provisioning install Phoenix Web Framework
 
 # fix locale warning for elixir and add-apt-repository
-locale-gen en_US.UTF-8
+sudo locale-gen en_US.UTF-8
+sudo dpkg-reconfigure locales
 
 # install Erlang/OTP platform and Elixir
 wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
@@ -29,7 +30,7 @@ rm erlang-solutions_1.0_all.deb
 wget https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz
 tar xf node-v8.10.0-linux-x64.tar.xz
 sudo mkdir /usr/local/lib/nodejs
-sudo mv node-v8.10.0-linux-x64 /usr/local/lib/nodejs/node-v8.10.0
+sudo mv node-v8.10.0-linux-x64 /usr/local/lib/nodejs
 rm -r node-v8.10.0-linux-x64.tar.xz
 export NODE_HOME=/usr/local/lib/nodejs/node-v8.10.0
 export PATH=$NODE_HOME/bin:$PATH
@@ -39,11 +40,12 @@ export PATH=$NODE_HOME/bin:$PATH
 mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez
 
 # create new Phoenix application (beyond this point is optional)
-mix phx.new /home/vagrant/hello
+echo Y | mix phx.new /home/vagrant/hello
 
 cd hello
+mix local.hex --force
 mix deps.get
-cd hello/assets
+cd assets
 npm install
 node node_modules/brunch/bin/brunch build
 
