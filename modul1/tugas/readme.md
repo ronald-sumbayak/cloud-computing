@@ -95,18 +95,12 @@
 	vagrant ssh
 
 - Untuk memastikan apakah nginx sudah terinstall, buka localhost:port pada browser. Jika muncul kalimat "Welcome to nginx!", berarti nginx berhasil terinstall
-	
-4. Buat vagrant virtualbox dan lakukan provisioning install:
-    1.	Squid proxy
-    2.	Bind9
-		
-- Buka file bootsrap.sh, lalu ketikkan perintah berikut untuk menginstall Squid proxy dan Bind9:
-	# install squid proxy
-	apt-get install -y -f squid
-	# install bind9
-	apt-get install -y -f bind9
 
-- Simpan file bootstrap.sh
-
-- Jalankan perintah :
-	vagrant provision
+4 Buat vagrant virtualbox dan lakukan provisioning install: squid-proxy, bind9
+Buka file bootsrap.sh, lalu tambahkan:
+```bash
+# install squid-proxy
+apt-get install -y -f squid
+# install bind9
+apt-get install -y -f bind9
+```
