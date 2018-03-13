@@ -16,7 +16,6 @@
 
 # fix locale warning for elixir and add-apt-repository
 locale-gen en_US.UTF-8
-sudo dpkg-reconfigure locales
 
 # install Erlang/OTP platform and Elixir
 wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
@@ -43,10 +42,8 @@ mix archive.install --force https://github.com/phoenixframework/archives/raw/mas
 mix phx.new /home/vagrant/hello
 
 cd hello
-mix local.hex --force
 mix deps.get
-
-cd assets
+cd hello/assets
 npm install
 node node_modules/brunch/bin/brunch build
 

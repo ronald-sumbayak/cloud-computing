@@ -41,36 +41,27 @@ end
     ![check_user_awan](assets/check_user_awan.png)
 
 2. Buat vagrant virtualbox dan lakukan provisioning install Phoenix Web Framework
-- Buka file bootstrap.sh, lalu tambahkan perintah untuk menginstall Erlang/OTP platform (bahasa) dan Phoenix:
-	# fix locale warning for elixir and add-apt-repository
+
+	Beberapa packages memerlukan config locale menggunakan UTF-8. Hal itu bisa dilakukan dengan:
+
+	```sh
 	locale-gen en_US.UTF-8
 	sudo dpkg-reconfigure locales
-	# install Erlang/OTP platform and Elixir
+	```
+	
+	Phoenix Web Framework ditulis menggunakan bahasa Elixir. Maka harus menginstall Elixir terlebih dahulu:
+
+	```sh
 	wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
 	sudo dpkg -i erlang-solutions_1.0_all.deb
 	sudo apt-get update
 	sudo apt-get -y -f install esl-erlang elixir
 	mix local.hex --force
 	rm erlang-solutions_1.0_all.deb
-	# install Phoenix
-	mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez
+	```
 
-- Simpan file bootstrap.sh
-
-- Jalankan perintah :
-	vagrant provision
-	vagrant up
-	vagrant ssh
-
-- Untuk memulai membuat project, ketikkan perintah:
-	# create new Phoenix application (beyond this point is optional)
-	mix phx.new /home/vagrant/hello
-
-	cd /home/vagrant/hello
-	mix local.hex --force
-	mix deps.get
-
-	cd assets
+	Untuk package dependencies Phoenix menggunakan npm
+	```sh
 	wget https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz
 	tar xf node-v8.10.0-linux-x64.tar.xz
 	sudo mkdir /usr/local/lib/nodejs
@@ -79,9 +70,30 @@ end
 	export NODE_HOME=/usr/local/lib/nodejs/node-v8.10.0
 	export PATH=$NODE_HOME/bin:$PATH
 	. ~/.profile
+	```
+
+	Install Phoenix Web Framework
+	```
+	mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez
+	```
+
+	### Test Phoenix Web Framework
+	Buat project baru
+	```sh
+	mix phx.new /home/vagrant/hello
+	```
+
+    Install assets dan dependencies
+	```sh
+	cd hello
+	mix deps.get
+	cd hello/assets
 	npm install
 	node node_modules/brunch/bin/brunch build
+	```
 
+	Setup database
+	```sh
 	cd ..
 	sudo apt-get -y -f install postgresql postgresql-contrib
 	sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
@@ -89,15 +101,23 @@ end
 	sudo service postgresql restart
 	mix local.rebar --force
 	mix ecto.create
-	# mix phx.server
+	```
 
-3. Buat vagrant virtualbox dan lakukan provisioning install:
-		1.	php
-		2.	mysql
-		3.	composer
-		4.	nginx
-		setelah melakukan provioning, clone https://github.com/fathoniadi/pelatihan-laravel.git pada 	folder yang sama dengan vagrantfile di komputer host. Setelah itu sinkronisasi folder 	pelatihan-laravel host ke vagrant ke /var/www/web dan jangan lupa install vendor laravel 	agar dapat dijalankan. Setelah itu setting root document nginx ke /var/www/web. webserver 	VM harus dapat diakses pada port 8080 komputer host dan mysql pada vm dapat diakses 	pada port 6969 komputer host.		
-		----------
+	Run server
+	```sh
+	mix phx.server
+	```
+	![check_phoenix_running](assets/check_phoenix_running.png)
+
+	Pada vagrantfile sudah diset port forward dari 4000 guest ke 12000 host
+	```ruby
+	config.vm.network 'forwarded_port', guest: 4000, host: 12000
+	```
+
+	Hasil
+	![check_phoenix](assets/check_phoenix.png)
+
+3. Buat vagrant virtualbox dan lakukan provisioning install: php, mysql, composer, nginx
 		#4 Install NGINX
 - Buka file bootstrap.sh, lalu tambahkan perintah berikut untuk menginstall Nginx:
 	# install nginx
