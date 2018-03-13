@@ -63,40 +63,48 @@ mix ecto.create
 # 3. Buat vagrant virtualbox dan lakukan provisioning install: php, mysql, composer, nginx
 
 # install nginx
-sudo apt-get install -y -f nginx
-rm -f /etc/nginx/sites-enabled/*
-ln -s /vagrant/pelatihan-laravel.conf /etc/nginx/sites-enabled
-nginx -t
-service nginx start
+sudo apt-get -y --purge apache2
+sudo apt-get -y -f install nginx
+sudo rm -f /etc/nginx/sites-enabled/*
+sudo ln -s /vagrant/pelatihan-laravel.conf /etc/nginx/sites-enabled
+sudo nginx -t
+sudo service nginx start
 
-# # install php
-# apt-get install -y -f python-software-properties
-# apt-add-repository ppa:ondrej/php
-# apt-get update
-# apt-get install -y -f php7.2 php7.2-fpm php7.2-mysql
-# apt-get install -y -f php7.2-mcrypt mcrypt
-# apt-get install -y -f php7.2-mbstring php7.2-xml
+# install php
+sudo apt-get -y -f install python-software-properties software-properties-common
+sudo apt-add-repository -y ppa:ondrej/php
+sudo apt-get -y -f install php7.2
+sudo apt-get -y -f install php7.2-fpm php7.2-cli php7.2-cgi
+sudo apt-get -y -f install php7.2-mysql php7.2-mbstring php7.2-tokenizer php7.2-xml php7.2-ctype php7.2-json
+sudo apt-get -y -f install zip unzip
 
-# # install composer
-# sudo apt-get install -y -f curl
-# curl -sS https://getcomposer.org/installer | php
-# mv composer.phar /usr/local/bin/composer
+# install composer
+curl 'https://getcomposer.org/installer' | php
+sudo mv composer.phar /usr/local/bin/composer
+composer global require "laravel/installer"
 
-# # install mysql
-# debconf-set-selections <<< 'mysql-server mysql-server/root_password password '
-# debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password '
-# apt-get install -y -f mysql-server
-# mysql_install_db
+# install mysql
+sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password \"''\""
+sudo debconf-set-selections <<<  "mysql-server mysql-server/root_password_again password \"''\""
+sudo apt-get install -y -f mysql-server
+mysql_install_db
 
-# ####################################################################################################
+# config project
+cd /var/www/web
+composer install
+php artisan key:generate
 
-# ####################################################################################################
-# # 4. Buat vagrant virtualbox dan lakukan provisioning install: squid proxy, bind9
+####################################################################################################
 
-# # install squid proxy
-# apt-get install -y -f squid
+####################################################################################################
+# 4. Buat vagrant virtualbox dan lakukan provisioning install: squid proxy, bind9
 
-# # install bind9
-# apt-get install -y -f bind9
+# install squid proxy
+apt-get install -y -f squid
 
-# ####################################################################################################
+# install bind9
+apt-get install -y -f bind9
+
+####################################################################################################
+
+sudo apt-get autoremove
