@@ -55,7 +55,7 @@ end
 	wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
 	sudo dpkg -i erlang-solutions_1.0_all.deb
 	sudo apt-get update
-	sudo apt-get -y -f install esl-erlang elixir
+	sudo apt-get -y install esl-erlang elixir
 	mix local.hex --force
 	rm erlang-solutions_1.0_all.deb
 	```
@@ -95,7 +95,7 @@ end
 	Setup database
 	```sh
 	cd ..
-	sudo apt-get -y -f install postgresql postgresql-contrib
+	sudo apt-get -y install postgresql postgresql-contrib
 	sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
 	sudo -u postgres psql -c "CREATE DATABASE hello_dev;"
 	sudo service postgresql restart
@@ -121,20 +121,20 @@ end
 
     Install PHP (+ekstensi untuk Laravel)
 	```sh
-	sudo apt-get -y -f install python-software-properties software-properties-common
+	sudo apt-get -y install python-software-properties software-properties-common
 	sudo apt-add-repository -y ppa:ondrej/php
 	sudo apt-get update
-	sudo apt-get -y -f install php7.2
-	sudo apt-get -y -f install php7.2-fpm php7.2-cgi
-	sudo apt-get -y -f install php7.2-mysql php7.2-mbstring php7.2-tokenizer php7.2-xml php7.2-ctype php7.2-json
-	sudo apt-get -y -f install zip unzip
+	sudo apt-get -y install php7.2
+	sudo apt-get -y install php7.2-fpm php7.2-cgi
+	sudo apt-get -y install php7.2-mysql php7.2-mbstring php7.2-tokenizer php7.2-xml php7.2-ctype php7.2-json
+	sudo apt-get -y install zip unzip
 	```
 
-	Install mysql. Karena pada saat install mysql akan meminta password, bisa diakali dengan menggunakan cara berikut
+	Install mysql. Karena pada saat install mysql akan meminta password untuk user root, pengisian password kosong bisa diakali dengan menggunakan cara berikut
 	```sh
 	sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password \"''\""
 	sudo debconf-set-selections <<<  "mysql-server mysql-server/root_password_again password \"''\""
-	sudo apt-get install -y -f mysql-server
+	sudo apt-get install -y mysql-server
 	mysql_install_db
 	```
 
@@ -148,7 +148,7 @@ end
 	Install nginx
 	```sh
 	sudo apt-get -y --purge apache2
-	sudo apt-get -y -f install nginx
+	sudo apt-get -y install nginx
     ```
 
 	[Configurasi server nginx](pelatihan-laravel.conf)
@@ -177,7 +177,7 @@ end
 	}
 	```
 
-	File konfigurasi di atas berada pada folder ini (tempat Vagrantfile) kemudian di link ke folder `/etc/nginx/sites-enabled` pada guest. Konfigurasi default diunlink terlebih dahulu dari enabled site
+	File konfigurasi di atas berada pada folder ini (tempat Vagrantfile) kemudian di link ke folder `/etc/nginx/sites-enabled` pada guest. Konfigurasi `default` di-unlink terlebih dahulu dari enabled site
 	```sh
 	sudo rm -f /etc/nginx/sites-enabled/*
 	sudo ln -s /vagrant/pelatihan-laravel.conf /etc/nginx/sites-enabled
@@ -196,11 +196,11 @@ end
 	```
 
 4. Buat vagrant virtualbox dan lakukan provisioning install: squid-proxy, bind9
-Buka file bootsrap.sh, lalu tambahkan:
+
 	```sh
 	# install squid-proxy
-	sudo apt-get install -y -f squid
+	sudo apt-get install -y squid
 
 	# install bind9
-	sudo apt-get install -y -f bind9
+	sudo apt-get install -y bind9
 	```
