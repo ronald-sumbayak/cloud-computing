@@ -118,27 +118,89 @@ end
 	![check_phoenix](assets/check_phoenix.png)
 
 3. Buat vagrant virtualbox dan lakukan provisioning install: php, mysql, composer, nginx
-		#4 Install NGINX
-- Buka file bootstrap.sh, lalu tambahkan perintah berikut untuk menginstall Nginx:
-	# install nginx
-	sudo apt-get install -y -f nginx
-	service nginx start
 
-- Simpan file bootstrap.sh
+    Install PHP (+ekstensi untuk Laravel)
+	```sh
+	sudo apt-get -y -f install python-software-properties software-properties-common
+	sudo apt-add-repository -y ppa:ondrej/php
+	sudo apt-get update
+	sudo apt-get -y -f install php7.2
+	sudo apt-get -y -f install php7.2-fpm php7.2-cgi
+	sudo apt-get -y -f install php7.2-mysql php7.2-mbstring php7.2-tokenizer php7.2-xml php7.2-ctype php7.2-json
+	sudo apt-get -y -f install zip unzip
+	```
 
-- Jalankan perintah :
-	vagrant provision
-	vagrant up
-	vagrant ssh
+	Install mysql. Karena pada saat install mysql akan meminta password, bisa diakali dengan menggunakan cara berikut
+	```sh
+	sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password \"''\""
+	sudo debconf-set-selections <<<  "mysql-server mysql-server/root_password_again password \"''\""
+	sudo apt-get install -y -f mysql-server
+	mysql_install_db
+	```
 
-- Untuk memastikan apakah nginx sudah terinstall, buka localhost:port pada browser. Jika muncul kalimat "Welcome to nginx!", berarti nginx berhasil terinstall
+	Install Composer (+Laravel)
+	```sh
+	curl 'https://getcomposer.org/installer' | php
+	sudo mv composer.phar /usr/local/bin/composer
+	composer global require "laravel/installer"
+	```
+
+	Install nginx
+	```sh
+	sudo apt-get -y --purge apache2
+	sudo apt-get -y -f install nginx
+    ```
+
+	[Configurasi server nginx](pelatihan-laravel.conf)
+	```
+	server {
+		listen 80 default_server;
+		listen [::]:80 default_server ipv6only=on;
+
+		root /var/www/web/public;
+		index index.php index.html index.htm;
+
+		server_name _;
+
+		location / {
+			try_files $uri $uri/ /index.php?$query_string;
+		}
+		
+		location ~ \.php$ {
+			include snippets/fastcgi-php.conf;
+			fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+		}
+
+		location ~ /\.ht {
+			deny all;
+		}
+	}
+	```
+
+	File konfigurasi di atas berada pada folder ini (tempat Vagrantfile) kemudian di link ke folder `/etc/nginx/sites-enabled` pada guest. Konfigurasi default diunlink terlebih dahulu dari enabled site
+	```sh
+	sudo rm -f /etc/nginx/sites-enabled/*
+	sudo ln -s /vagrant/pelatihan-laravel.conf /etc/nginx/sites-enabled
+	sudo nginx -t
+	sudo service nginx start
+	sudo service php7.2-fpm start
+	```
+
+	Setup project. Install dependencies, generate key, set folder permission
+	```sh
+	cd /var/www/web
+	cp .env.example .env
+	composer install
+	php artisan key:generate
+	sudo chmod 777 storage bootstrap/cache
+	```
 
 4. Buat vagrant virtualbox dan lakukan provisioning install: squid-proxy, bind9
 Buka file bootsrap.sh, lalu tambahkan:
-```sh
-# install squid-proxy
-sudo apt-get install -y -f squid
+	```sh
+	# install squid-proxy
+	sudo apt-get install -y -f squid
 
-# install bind9
-sudo apt-get install -y -f bind9
-```
+	# install bind9
+	sudo apt-get install -y -f bind9
+	```
