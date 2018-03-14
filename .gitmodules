@@ -1,0 +1,3 @@
+[submodule "vagrant/tugas/pelatihan-laravel"]
+	path = vagrant/tugas/pelatihan-laravel
+	url = git@github.com:fathoniadi/pelatihan-laravel.git
