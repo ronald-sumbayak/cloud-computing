@@ -29,7 +29,7 @@ end
 ### Soal
 1. Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'
 
-	Menggunakan command useradd. Opsi -p akan menerima text password yang harus sudah di-hash. Opsi -d menentukan home directory dari user yang akan dibuat (default `/` jika tidak di-set)
+    Menggunakan command useradd. Opsi -p akan menerima text password yang harus sudah di-hash. Opsi -d menentukan home directory dari user yang akan dibuat (default `/` jika tidak di-set)
 
     ```sh
     sudo useradd \
@@ -44,164 +44,174 @@ end
 
 2. Buat vagrant virtualbox dan lakukan provisioning install Phoenix Web Framework
 
-	Beberapa packages memerlukan config locale menggunakan UTF-8. Hal itu bisa dilakukan dengan:
+    Beberapa packages memerlukan config locale menggunakan UTF-8. Hal itu bisa dilakukan dengan:
 
-	```sh
-	sudo locale-gen en_US.UTF-8
-	sudo dpkg-reconfigure locales
-	```
-	
-	Phoenix Web Framework ditulis menggunakan bahasa Elixir. Maka harus menginstall Elixir terlebih dahulu:
+    ```sh
+    export LANG=en_US.UTF-8
+    export LANGUAGE=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+    sudo locale-gen en_US.UTF-8
+    ```
+    
+    Phoenix Web Framework ditulis menggunakan bahasa Elixir. Maka harus menginstall Elixir terlebih dahulu:
 
-	```sh
-	wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
-	sudo dpkg -i erlang-solutions_1.0_all.deb
-	sudo apt-get update
-	sudo apt-get -y install esl-erlang elixir
-	mix local.hex --force
-	rm erlang-solutions_1.0_all.deb
-	```
+    ```sh
+    wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
+    sudo dpkg -i erlang-solutions_1.0_all.deb
+    sudo apt-get update
+    sudo apt-get -y install esl-erlang elixir
+    mix local.hex --force
+    rm erlang-solutions_1.0_all.deb
+    ```
 
-	Untuk package dependencies Phoenix menggunakan npm
-	```sh
-	wget https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz
-	tar xf node-v8.10.0-linux-x64.tar.xz
-	sudo mkdir /usr/local/lib/nodejs
-	sudo mv node-v8.10.0-linux-x64 /usr/local/lib/nodejs
-	sudo mv /usr/local/lib/nodejs/node-v8.10.0-linux-x64 /usr/local/lib/nodejs/node-v8.10.0
-	rm -r node-v8.10.0-linux-x64.tar.xz
-	export NODE_HOME=/usr/local/lib/nodejs/node-v8.10.0
-	export PATH=$NODE_HOME/bin:$PATH
-	. ~/.profile
-	```
+    Untuk package dependencies Phoenix menggunakan npm
+    ```sh
+    wget https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz
+    tar xf node-v8.10.0-linux-x64.tar.xz
+    sudo mv -T node-v8.10.0-linux-x64 /usr/local/lib/nodejs
+    export PATH=$PATH:/usr/local/lib/nodejs/bin
+    echo export PATH=$PATH:/usr/local/lib/nodejs/bin >> ~/.bashrc
+    rm node-v8.10.0-linux-x64.tar.xz
+    ```
 
-	Install Phoenix Web Framework
-	```
-	mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez
-	```
+    Install Phoenix Web Framework
+    ```
+    mix archive.install --force https://github.com/phoenixframework/archives/raw/master/phx_new.ez
+    sudo apt-get -y install inotify-tools
+    ```
 
-	### Test Phoenix Web Framework
-	Buat project baru
-	```sh
-	echo Y | mix phx.new /home/vagrant/hello
-	```
+    ### Test Phoenix Web Framework
+    Buat project baru
+    ```sh
+    echo Y | mix phx.new hello
+    ```
 
     Install assets dan dependencies
-	```sh
-	cd hello
-	mix local.hex --force
-	mix deps.get
+    ```sh
+    cd hello
+    mix local.hex --force
+    mix deps.get
+    cd assets && npm install && node node_modules/brunch/bin/brunch build
+    ```
 
-	cd assets
-	npm install
-	node node_modules/brunch/bin/brunch build
-	```
+    Setup database. Secara default phoenix menggunakan database posrtgresql dengan anggapan memiliki user 'postgres' dengan password 'postgres' dan nama database untuk project 'PROJECTNAME_dev'
+    ```sh
+    cd ..
+    sudo apt-get -y install postgresql postgresql-contrib
+    sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
+    sudo -u postgres psql -c "CREATE DATABASE hello_dev;"
+    sudo service postgresql restart
+    mix local.rebar --force
+    mix ecto.create
+    ```
 
-	Setup database
-	```sh
-	cd ..
-	sudo apt-get -y install postgresql postgresql-contrib
-	sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
-	sudo -u postgres psql -c "CREATE DATABASE hello_dev;"
-	sudo service postgresql restart
-	mix local.rebar --force
-	mix ecto.create
-	```
+    Run server
+    ```sh
+    mix phx.server
+    ```
+    ![check_phoenix_running](assets/check_phoenix_running.png)
 
-	Run server
-	```sh
-	mix phx.server
-	```
-
-	Pada vagrantfile sudah diset port forward dari 4000 guest ke 12000 host
-	```ruby
-	config.vm.network 'forwarded_port', guest: 4000, host: 12000
-	```
+    Pada [Vagrantfile](#vagrantfile) sudah diset port forward dari 4000 guest ke 12000 host
+    ```ruby
+    config.vm.network 'forwarded_port', guest: 4000, host: 12000
+    ```
+    ![check_phoenix_browser](assets/check_phoenix_browser.png)
 
 3. Buat vagrant virtualbox dan lakukan provisioning install: php, mysql, composer, nginx
 
     Install PHP (+ekstensi untuk Laravel)
-	```sh
-	sudo apt-get -y install python-software-properties software-properties-common
-	sudo apt-add-repository -y ppa:ondrej/php
-	sudo apt-get update
-	sudo apt-get -y install php7.2
-	sudo apt-get -y install php7.2-fpm php7.2-cgi
-	sudo apt-get -y install php7.2-mysql php7.2-mbstring php7.2-tokenizer php7.2-xml php7.2-ctype php7.2-json
-	sudo apt-get -y install zip unzip
-	```
-
-	Install mysql. Karena pada saat install mysql akan meminta password untuk user root, pengisian password kosong bisa diakali dengan menggunakan cara berikut
-	```sh
-	sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password \"''\""
-	sudo debconf-set-selections <<<  "mysql-server mysql-server/root_password_again password \"''\""
-	sudo apt-get install -y mysql-server
-	mysql_install_db
-	```
-
-	Install Composer (+Laravel)
-	```sh
-	curl 'https://getcomposer.org/installer' | php
-	sudo mv composer.phar /usr/local/bin/composer
-	composer global require "laravel/installer"
-	```
-
-	Install nginx. Karena secara default apache sudah terinstall pada box ubuntu/xenial64, maka harus dihapus dulu sebelum menginstall nginx
-	```sh
-	sudo apt-get -y --purge apache2
-	sudo apt-get -y install nginx
+    ```sh
+    sudo apt-get -y install python-software-properties software-properties-common
+    sudo apt-add-repository -y ppa:ondrej/php
+    sudo apt-get update
+    sudo apt-get -y install php7.2
+    sudo apt-get -y install php7.2-fpm php7.2-cgi
+    sudo apt-get -y install php7.2-common php7.2-mysql php7.2-mbstring php7.2-xml
+    sudo apt-get -y install zip unzip
     ```
 
-	[Configurasi server nginx](pelatihan-laravel.conf)
-	```
-	server {
-		listen 80 default_server;
-		listen [::]:80 default_server ipv6only=on;
+    Install mysql. Karena pada saat install mysql akan meminta password untuk user root, pengisian password root bisa diakali dengan menggunakan cara berikut
+    ```sh
+    sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
+    sudo debconf-set-selections <<<  "mysql-server mysql-server/root_password_again password root"
+    sudo apt-get install -y mysql-server
+    ```
 
-		root /var/www/web/public;
-		index index.php index.html index.htm;
+    Karena pada [Vagrantfile](#vagrantfile) port 3306 (port default mysql) guest sudah di-forward ke port 6969 host, maka mysql bisa diakses dari komputer host
+    ```ruby
+    config.vm.network 'forwarded_port', guest: 3306, host: 6969
+    ```
+    Namun privilige nya belum diatur sehingga masih gagal dalam login.
+    ![check_mysql_running](assets/check_mysql_forwarded.png)
 
-		server_name _;
+    Install Composer (+Laravel)
+    ```sh
+    curl 'https://getcomposer.org/installer' | php
+    sudo mv composer.phar /usr/local/bin/composer
+    composer global require "laravel/installer"
+    ```
 
-		location / {
-			try_files $uri $uri/ /index.php?$query_string;
-		}
-		
-		location ~ \.php$ {
-			include snippets/fastcgi-php.conf;
-			fastcgi_pass unix:/run/php/php7.2-fpm.sock;
-		}
+    Install nginx. Karena secara default apache sudah terinstall pada box ubuntu/xenial64, maka harus dihapus dulu sebelum menginstall nginx
+    ```sh
+    sudo apt-get -y --purge remove apache2
+    sudo apt-get -y install nginx
+    ```
 
-		location ~ /\.ht {
-			deny all;
-		}
-	}
-	```
+    [Configurasi server nginx](pelatihan-laravel.conf)
+    ```
+    server {
+        listen 80 default_server;
+        listen [::]:80 default_server ipv6only=on;
+        
+        root /var/www/web/public;
+        index index.php index.html index.htm;
 
-	File konfigurasi di atas berada pada folder ini (tempat Vagrantfile) kemudian di link ke folder `/etc/nginx/sites-enabled` pada guest. Konfigurasi `default` di-unlink terlebih dahulu dari enabled site
-	```sh
-	sudo rm -f /etc/nginx/sites-enabled/*
-	sudo ln -s /vagrant/pelatihan-laravel.conf /etc/nginx/sites-enabled
-	sudo nginx -t
-	sudo service nginx start
-	sudo service php7.2-fpm start
-	```
+        server_name _;
 
-	Setup project. Install dependencies, generate key, set folder permission
-	```sh
-	cd /var/www/web
-	cp .env.example .env
-	composer install
-	php artisan key:generate
-	sudo chmod 777 storage bootstrap/cache
-	```
+        location / {
+            try_files $uri $uri/ /index.php?$query_string;
+        }
+        
+        location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+            fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+        }
+
+        location ~ /\.ht {
+            deny all;
+        }
+    }
+    ```
+
+    File konfigurasi di atas berada pada folder ini (tempat Vagrantfile) kemudian di link ke folder `/etc/nginx/sites-enabled` pada guest. Konfigurasi `default` di-unlink terlebih dahulu dari enabled site
+    ```sh
+    sudo rm -f /etc/nginx/sites-enabled/*
+    sudo ln -s /vagrant/pelatihan-laravel.conf /etc/nginx/sites-enabled
+    sudo nginx -t
+    sudo service php7.2-fpm start
+    sudo service nginx restart
+    ```
+
+    Setup project. Install dependencies, generate key, set folder permission
+    ```sh
+    cd /var/www/web
+    cp .env.example .env
+    composer install
+    php artisan key:generate
+    ```
+
+    Hasil salah satu route
+    ```ruby
+    config.vm.network 'forwarded_port', guest: 80, host: 8080
+    ```
+    ![check_laravel_browser](assets/check_laravel_browser.png)
 
 4. Buat vagrant virtualbox dan lakukan provisioning install: squid-proxy, bind9
 
-	```sh
-	# install squid-proxy
-	sudo apt-get install -y squid
+    ```sh
+    # install squid-proxy
+    sudo apt-get -y install squid3
 
-	# install bind9
-	sudo apt-get install -y bind9
-	```
+    # install bind9
+    sudo apt-get -y install bind9
+    ```
