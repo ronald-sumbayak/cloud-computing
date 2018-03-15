@@ -74,7 +74,7 @@ sudo apt-get -y install zip unzip
 
 # install mysql
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
-sudo debconf-set-selections <<<  "mysql-server mysql-server/root_password_again password root"
+sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
 sudo apt-get -y install mysql-server
 
 # install composer (and laravel)
