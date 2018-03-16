@@ -5,4 +5,4 @@
 - 05111540000174 - [Ronald Andrean](https://github.com/ronald-sumbayak)
 
 ### Modul
-- 1: [Vagrant](/modul1) ([Tugas](/modul1/tugas))
+- 1: [Vagrant](/modul1) ([Tugas](/vagrant/tugas))
