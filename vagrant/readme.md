@@ -1,4 +1,4 @@
-**Disclaimer: This modul was copied from its [original owner](https://github.com/fathoniadi/cloud-2018/blob/master/vagrant/README.md). All rights reserved.**
+**Disclaimer: This README file was copied from its [original owner](https://github.com/fathoniadi/cloud-2018/blob/master/vagrant/README.md). All rights reserved.**
 
 # Vagrant
 

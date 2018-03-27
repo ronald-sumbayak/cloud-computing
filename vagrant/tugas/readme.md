@@ -4,6 +4,8 @@
 - [Vagrantfile](#vagrantfile)
 - [Provision](bootstrap.sh)
 
+
+
 ### [Vagrantfile](Vagrantfile)
 ```ruby
 # -*- mode: ruby -*-
@@ -19,7 +21,7 @@ Vagrant.configure('2') do |config|
   config.vm.synced_folder 'pelatihan-laravel', '/var/www/web'
   config.vm.provision 'shell', path: 'bootstrap.sh', privileged: false
 
-  config.vm.provider('virtualbox') do |vb|
+  config.vm.provider 'virtualbox' do |vb|
     vb.memory = 512
     vb.cpus = 1
   end
@@ -27,6 +29,9 @@ end
 ```
 
 ### Soal
+
+**Note: All features will work in assumes that the provision is completed successfully with no errors and no commands entered directly into guest machine (no ssh required).**
+
 1. Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'
 
     Menggunakan command useradd. Opsi -p akan menerima text password yang harus sudah di-hash. Opsi -d menentukan home directory dari user yang akan dibuat (default `/` jika tidak di-set)
