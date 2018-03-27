@@ -13,7 +13,7 @@ sudo apt-get -y --purge remove apache2
 sudo apt-get -y install nginx
 
 sudo rm -f /etc/nginx/sites-enabled/*
-sudo ln -s /vagrant/nginx.conf /etc/nginx/sites-enabled
+sudo ln -s /vagrant/balancer.conf /etc/nginx/sites-enabled
 sudo nginx -t
 sudo service php7.2-fpm start
 sudo service nginx restart

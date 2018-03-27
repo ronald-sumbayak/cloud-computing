@@ -1,0 +1,13 @@
+upstream workers {
+    server 192.168.0.3;
+    server 192.168.0.4;
+}
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+    
+    location / {
+        proxy_pass http://workers;
+    }
+}
