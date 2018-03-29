@@ -85,7 +85,8 @@ end
     sudo apt-get -y install inotify-tools
     ```
 
-    ### Test Phoenix Web Framework
+    Test Phoenix Web Framework
+    
     Buat project baru
     ```sh
     echo Y | mix phx.new hello
@@ -138,7 +139,7 @@ end
     Install mysql. Karena pada saat install mysql akan meminta password untuk user root, pengisian password root bisa diakali dengan menggunakan cara berikut
     ```sh
     sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
-    sudo debconf-set-selections <<<  "mysql-server mysql-server/root_password_again password root"
+    sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
     sudo apt-get install -y mysql-server
     ```
 
@@ -197,7 +198,7 @@ end
     sudo service nginx restart
     ```
 
-    Setup project. Install dependencies, generate key, set folder permission
+    Setup project. Install dependencies and generate key
     ```sh
     cd /var/www/web
     cp .env.example .env
