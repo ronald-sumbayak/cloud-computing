@@ -1,5 +1,4 @@
-# [Cloud Computing 
-2018](https://ronaldsumbayak.github.io/cloud-computing)
+# [Cloud Computing 2018](https://ronaldsumbayak.github.io/cloud-computing)
 
 ### Anggota Kelompok
 - 05111540000042 - [Hania Maghfira](https://github.com/hmaghfira)
