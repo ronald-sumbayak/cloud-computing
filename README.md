@@ -7,3 +7,4 @@
 ### Modul
 - 1: [Vagrant](vagrant) ([Tugas](vagrant/tugas))
 - 2: [Load Balancing](load-balancing) ([Tugas](load-balancing/tugas))
+- 3: [Docker](docker)
