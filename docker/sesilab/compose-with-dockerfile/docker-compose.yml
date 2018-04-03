@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+    ubuntu-cloud:
+        build:
+            context: ./
+        ports:
+            - '9001:80'
+        volumes:
+            - ./www:/var/www/html
