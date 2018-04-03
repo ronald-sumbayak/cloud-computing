@@ -6,10 +6,10 @@
 
 
 ### Persyaratan Mengikuti Praktikum
-        1. Sudah menginstall Ubuntu 16.04.
-        2. Sudah menginstall Docker CE
-        3. Sudah menginstall Docker Compose
-        4. Pastikan komputer dapat connect ke Internet
+    1. Sudah menginstall Ubuntu 16.04.
+    2. Sudah menginstall Docker CE
+    3. Sudah menginstall Docker Compose
+    4. Pastikan komputer dapat connect ke Internet
 
 ## A. Dasar Teori
 ### 1. Perbedaan _Virtual Machine_ dengan Docker
