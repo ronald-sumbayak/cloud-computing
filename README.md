@@ -1,10 +1,21 @@
-# [Cloud Computing 2018](https://ronaldsumbayak.github.io/cloud-computing)
+# [Cloud Computing 2018]
 
 ### Anggota Kelompok
-- 05111540000042 - [Hania Maghfira](https://github.com/hmaghfira)
-- 05111540000174 - [Ronald Andrean](https://github.com/ronald-sumbayak)
+- 05111540000042 - [Hania Maghfira]
+- 05111540000174 - [Ronald Andrean]
 
 ### Modul
-- 1: [Vagrant](vagrant) ([Tugas](vagrant/tugas))
-- 2: [Load Balancing](load-balancing) ([Tugas](load-balancing/tugas))
-- 3: [Docker](docker)
+- 1: [Vagrant] ([Tugas][Vagrant Tugas])
+- 2: [Load Balancing] ([Tugas][Load Balancing Tugas])
+- 3: [Docker]
+
+[Hania Maghfira]: https://github.com/hmaghfira
+[Ronald Andrean]: https://github.com/ronaldsumbayak
+
+[Cloud Computing 2018]: https://ronaldsumbayak.github.io/cloud-computing
+[Vagrant]: https://ronaldsumbayak.github.io/cloud-computing/vagrant
+[Vagrant Tugas]: https://ronaldsumbayak.github.io/cloud-computing/vagrant/tugas
+[Load Balancing]: https://ronaldsumbayak.github.io/cloud-computing/load-balancing
+[Load Balancing Tugas]: https://ronaldsumbayak.github.io/cloud-computing/load-balancing/tugas
+[Docker]: https://ronaldsumbayak.github.io/cloud-computing/docker
+[Docker Tugas]: https://ronaldsumbayak.github.io/cloud-computing/docker/tugas
