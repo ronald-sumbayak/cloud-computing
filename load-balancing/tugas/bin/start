@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+./bin/method $1
+
+# start balancer
+echo Starting Load Balancer...
+cp -f balancer/methods/${1} balancer/balancer.conf
+cd balancer
+vagrant up
+cd ..
+
+# start workers
+echo Starting Workers...
+cd workers
+cd worker1
+vagrant up
+cd ..
+cd worker1
+vagrant up
+cd ..
+
+# return to root directory
+cd ..

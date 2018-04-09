@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+actions=($(ls bin))
+
+if [ ! "$1" ]
+then
+    echo Action must be specified.
+    exit 1
+fi
+
+function is_action_valid () {
+    for action in ${actions[*]}
+    do
+        if [ "$1" = "$action" ]
+        then
+            return 1
+        fi
+    done
+    return 0
+}
+
+is_action_valid $1
+
+if [ $? -eq 0 ]
+then
+    echo Action can not be found.
+    echo -e Available actions are: '\e[93m'${actions[*]}'\e[0m'
+    exit 1
+fi
+
+chmod u+x bin/*
+./bin/$1 $2

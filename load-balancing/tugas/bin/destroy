@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# destroy balancer
+echo Destroying Balancer...
+cd balancer
+rm -f balancer.conf
+vagrant destroy --force
+cd ..
+
+# destroy workers
+echo Destroying Workers...
+cd workers
+cd worker1
+vagrant destroy --force
+cd ..
+cd worker2
+vagrant destroy --force
+cd ..
+
+# return to root directory
+cd ..

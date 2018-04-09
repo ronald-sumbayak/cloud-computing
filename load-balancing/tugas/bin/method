@@ -2,7 +2,7 @@
 
 methods=($(ls balancer/methods))
 
-if [ ! "$1"]
+if [ ! "$1" ]
 then
     echo Load Balancing method must be specified.
     exit 1
@@ -28,22 +28,4 @@ then
     exit 1
 fi
 
-# start balancer
-echo Starting Load Balancer...
 cp -f balancer/methods/${1} balancer/balancer.conf
-cd balancer
-vagrant up
-cd ..
-
-# start workers
-echo Starting Workers...
-cd workers
-cd worker1
-vagrant up
-cd ..
-cd worker1
-vagrant up
-cd ..
-
-# return to root directory
-cd ..
