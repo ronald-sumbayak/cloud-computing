@@ -1,4 +1,43 @@
-2. Analisa apa perbedaan antara ketiga algoritma tersebut.
+#### 1. Kasus
+
+### How to Use
+#### Startup
+```sh
+./load_balancing start [balancing_method]
+```
+> Balancing method can be between **round_robin**, **ip_hash**, or **least_conn**.
+
+Example:
+```sh
+./load_balancing start round_robin
+./load_balancing start ip_hash
+./load_balancing start least_conn
+```
+
+#### Change Balancing Method
+To change current balancing method, run:
+```sh
+./load_balancing method [balancing_method]
+```
+> Balancing method can be between **round_robin**, **ip_hash**, or **least_conn**.
+Then reload the balancer server.
+
+Example
+```sh
+./load_balancing method round_robin
+./load_balancing method ip_hash
+./load_balancing method least_conn
+```
+
+#### Destroy
+To destroy currently active balancer and workers:
+```sh
+./load_balancing destroy
+```
+
+---
+
+#### 2. Analisa apa perbedaan antara ketiga algoritma tersebut.
 
 - Round Robin :
 Membagi beban kerja secara berurutan dari satu server ke server lainnya. Konsep dasar dari algoritma ini adalah time sharing, yaitu membagikan beban kerja sesuai dengan antrian.
