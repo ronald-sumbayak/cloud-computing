@@ -15,7 +15,7 @@ cd workers
 cd worker1
 vagrant up
 cd ..
-cd worker1
+cd worker2
 vagrant up
 cd ..
 
