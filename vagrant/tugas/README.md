@@ -32,7 +32,11 @@ Vagrant.configure('2') do |config|
 end
 ```
 
+---
+
 > Note: All features will work in assumes that the provision is completed successfully with no errors and no commands entered directly into guest machine (no ssh required).**
+
+---
 
 #### 1
 **Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'**
@@ -49,6 +53,8 @@ sudo useradd \
 did it work?
 
 ![check_user_awan](assets/check_user_awan.png)
+
+---
 
 #### 2
 **Buat vagrant virtualbox dan lakukan provisioning install Phoenix Web Framework**
@@ -135,6 +141,8 @@ config.vm.network 'forwarded_port', guest: 4000, host: 12000
 ```
 
 ![check_phoenix_browser](assets/check_phoenix_browser.png)
+
+---
 
 #### 3
 **Buat vagrant virtualbox dan lakukan provisioning install: php, mysql, composer, nginx**
@@ -237,6 +245,8 @@ config.vm.network 'forwarded_port', guest: 80, host: 8080
 ```
 
 ![check_laravel_browser](assets/check_laravel_browser.png)
+
+---
 
 #### 4
 **Buat vagrant virtualbox dan lakukan provisioning install: squid-proxy, bind9**
