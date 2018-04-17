@@ -1,6 +1,68 @@
 version: '3'
 services:
+    worker1:
+        container_name: reservasi-worker1
+        image: reservasi
+        depends_on:
+            - db
+        environment:
+            DB_HOST: 192.168.0.24
+            DB_NAME: reservasi
+            DB_USERNAME: userawan
+            DB_PASSWORD: buayakecil
+        ports:
+            - 5002:5000
+        networks:
+            reservasi:
+                ipv4_address: 192.168.0.21
+    worker2:
+        container_name: reservasi-worker2
+        image: reservasi
+        depends_on:
+            - db
+        environment:
+            DB_HOST: 192.168.0.24
+            DB_NAME: reservasi
+            DB_USERNAME: userawan
+            DB_PASSWORD: buayakecil
+        ports:
+            - 5003:5000
+        networks:
+            reservasi:
+                ipv4_address: 192.168.0.22
+    worker3:
+        container_name: reservasi-worker3
+        image: reservasi
+        depends_on:
+            - db
+        environment:
+            DB_HOST: 192.168.0.24
+            DB_NAME: reservasi
+            DB_USERNAME: userawan
+            DB_PASSWORD: buayakecil
+        ports:
+            - 5004:5000
+        networks:
+            reservasi:
+                ipv4_address: 192.168.0.23
+    db:
+        container_name: reservasi-db
+        image: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: reservasi
+            MYSQL_USER: userawan
+            MYSQL_PASSWORD: buayakecil
+        volumes:
+            - ./.mysql_data:/var/lib/mysql
+            - ./reservasi/reservasi.sql:/docker-entrypoint-initdb.d/reservasi.sql
+        ports:
+            - 5001:3306
+        networks:
+            reservasi:
+                ipv4_address: 192.168.0.24
     balancer:
+        container_name: reservasi-balancer
         image: nginx
         depends_on:
             - worker1
@@ -13,21 +75,8 @@ services:
         networks:
             reservasi:
                 ipv4_address: 192.168.0.25
-    worker1:
-        image: reservasi
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.21
-    worker2:
-        image: reservasi
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.22
-    worker3:
-        image: reservasi
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.23
+volumes:
+    reservasi:
 networks:
     reservasi:
         ipam:
