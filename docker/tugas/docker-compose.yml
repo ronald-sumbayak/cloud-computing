@@ -11,22 +11,23 @@ services:
         volumes:
             - ./balancer.conf:/etc/nginx/conf.d/default.conf
         networks:
-            - reservasi
+            reservasi:
+                ipv4_address: 192.168.0.25
     worker1:
         image: reservasi
         networks:
             reservasi:
-                ipv4_address: 192.168.0.5
+                ipv4_address: 192.168.0.21
     worker2:
         image: reservasi
         networks:
             reservasi:
-                ipv4_address: 192.168.0.5
+                ipv4_address: 192.168.0.22
     worker3:
         image: reservasi
         networks:
             reservasi:
-                ipv4_address: 192.168.0.5
+                ipv4_address: 192.168.0.23
 networks:
     reservasi:
         ipam:
