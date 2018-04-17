@@ -5,8 +5,7 @@ services:
         ports:
             - '5000:80'
         volumes:
-            - balancer.conf:/etc/nginx/balancer.conf:ro
-        # command: /bin/bash -c "nginx -g 'daemon off;'"
+            - ./balancer.conf:/etc/nginx/balancer.conf:ro
     worker1:
         image: reservasi
         ports:
