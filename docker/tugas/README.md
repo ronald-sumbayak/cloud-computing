@@ -1,3 +1,9 @@
+# How to Run
+
+```sh
+docker-compose up
+```
+
 ### E. Soal
 
 #### [Peraturan]
