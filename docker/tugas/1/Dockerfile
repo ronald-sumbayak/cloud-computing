@@ -1,9 +1,7 @@
 FROM ubuntu:16.04
-RUN apt-get update -y
-RUN apt-get install -y python-pip python-dev build-essential
-RUN apt-get install -y libmysqlclient-dev
-COPY . /app
-WORKDIR /app
-RUN pip install -r req.txt
+RUN apt-get update && apt-get -y install python-pip libmysqlclient-dev
+COPY ../reservasi /reservasi
+WORKDIR /reservasi
+RUN pip install -r requirements.txt
 ENTRYPOINT ["python"]
 CMD ["server.py"]
