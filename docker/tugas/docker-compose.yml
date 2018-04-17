@@ -27,3 +27,6 @@ services:
                 ipv4_address: 192.168.0.5
 networks:
     reservasi:
+        ipam:
+            config:
+                - subnet: 192.169.0.0/24
