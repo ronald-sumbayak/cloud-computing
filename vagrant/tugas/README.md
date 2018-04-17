@@ -164,7 +164,7 @@ Install mysql. Karena pada saat install mysql akan meminta password untuk user r
 ```sh
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
-sudo apt-get install -y mysql-server
+sudo apt-get -y install mysql-server
 ```
 
 Karena pada [Vagrantfile](#vagrantfile) port 3306 (port default mysql) guest sudah di-forward ke port 6969 host, maka mysql bisa diakses dari komputer host
