@@ -5,7 +5,7 @@ docker-compose up
 ```
 
 # 1
-1. Buat file [Dockerfile](../Dockerfile) pada folder reservasi `nano Dockerfile`
+1. Buat file [Dockerfile](Dockerfile) pada folder reservasi `nano Dockerfile`
 2. Ketikkan perintah berikut :
     ```Dockerfile
     FROM ubuntu:16.04
@@ -20,7 +20,7 @@ docker-compose up
 4. Cek container dengan perintah `sudo docker ps`.
 
 # 2
-1. Buat file [docker-compose.yml](../docker-compose.yml) pada folder dimana Dockerfile dibuat.
+1. Buat file [docker-compose.yml](docker-compose.yml) pada folder dimana Dockerfile dibuat.
 2. Buat 3 buah worker dengan menggunakan image yang dibuat pada soal [1](#1).
 ```yml
 services:
@@ -113,7 +113,7 @@ setup db
             reservasi:
                 ipv4_address: 192.168.0.24
 ```
-Complete file : [docker-compose.yml](../docker-compose.yml)
+Complete file : [docker-compose.yml](docker-compose.yml)
 
 2. Simpan. Jalankan perintah `sudo docker-compose up -d`. Untuk mengecek kontainer yang berjalan, jalankan perintah `sudo docker-compose images`.
 
