@@ -85,7 +85,7 @@ services:
 ```
 
 # 4
-1. Tambahkan setup db untuk worker dan setup db pada file docker-compose.yml
+1. Tambahkan setup db untuk worker dan setup db pada file docker-compose.yml.
 setup db untuk worker1, worker2, worker3
 ```yml
    depends_on:
@@ -113,5 +113,8 @@ setup db
             reservasi:
                 ipv4_address: 192.168.0.24
 ```
+Complete file : [docker-compose.yml](../docker-compose.yml)
+
 2. Simpan. Jalankan perintah `sudo docker-compose up -d`. Untuk mengecek kontainer yang berjalan, jalankan perintah `sudo docker-compose images`.
+
 3. Cek pada browser dengan memasukkan `localhost:5000`.
