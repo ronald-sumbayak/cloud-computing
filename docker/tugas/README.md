@@ -20,7 +20,8 @@ docker-compose up
 4. Cek container dengan perintah `sudo docker ps`.
 
 # 2
-Buat 3 buah worker dengan menggunakan image yang dibuat pada soal [1](#1).
+1. Buat file [docker-compose.yml](../docker-compose.yml) pada folder dimana Dockerfile dibuat.
+2. Buat 3 buah worker dengan menggunakan image yang dibuat pada soal [1](#1).
 ```yml
 services:
     worker1:
@@ -32,7 +33,7 @@ services:
 ```
 
 # 3
-Tambahkan service untuk load balancer.
+1. Tambahkan service untuk load balancer pada file docker-compose.yml
 ```yml
 balancer:
     image: nginx
@@ -53,7 +54,7 @@ Keterangan:
 - `volumes`
   Mount file [balancer.conf](balancer.conf) ke directory `/etc/nginx/conf.d` pada container dimana nginx akan meng-include config server.
 
-Tambahkan docker networks pada compose file agar balancer dan workers berada pada satu network.
+2. Tambahkan docker networks pada compose file agar balancer dan workers berada pada satu network.
 ```yml
 networks:
     reservasi:
@@ -62,7 +63,7 @@ networks:
                 - subnet: 192.168.0.0/24
 ```
 
-Berikan static IP pada balancer dan workers.
+3. Berikan static IP pada balancer dan workers.
 ```yml
 services:
     worker1:
@@ -84,4 +85,33 @@ services:
 ```
 
 # 4
-### Nomer 4 belom v:
+1. Tambahkan setup db untuk worker dan setup db pada file docker-compose.yml
+setup db untuk worker1, worker2, worker3
+```yml
+   depends_on:
+        - db
+   environment:
+        DB_HOST: 192.168.0.24
+        DB_NAME: reservasi
+        DB_USERNAME: userawan
+        DB_PASSWORD: buayakecil
+```
+setup db
+```yml
+   db:
+        container_name: reservasi-db
+        image: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: reservasi
+            MYSQL_USER: userawan
+            MYSQL_PASSWORD: buayakecil
+        volumes:
+            - ./.mysql_data:/var/lib/mysql
+            - ./reservasi/reservasi.sql:/docker-entrypoint-initdb.d/reservasi.sql
+        networks:
+            reservasi:
+                ipv4_address: 192.168.0.24
+```
+2. Simpan. Jalankan perintah `sudo docker-compose up -d`. Untuk mengecek kontainer yang berjalan, jalankan perintah `sudo docker-compose images`.
+3. Cek pada browser dengan memasukkan `localhost:5000`.
