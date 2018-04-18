@@ -5,12 +5,12 @@
 - [Penyelesaian](#penyelesaian)
   - [Nomor 1](#1)
     - [Dockerfile](#dockerfile)
-    - [server.py](#server-py)
+    - [server.py](#serverpy)
   - [Nomor 2](#2)
   - [Nomor 3](#3)
-    - [balancer.conf](#balancer-conf)
+    - [balancer.conf](#balancerconf)
   - [Nomor 4](#4)
-  - [docker-compose](#final-docker-compose-yml)
+  - [docker-compose](#final-docker-composeyml)
   - [Test](#test)
 
 ## How to Run
@@ -45,69 +45,13 @@ CMD ["server.py"]
 
 Setiap container nantinya akan memiliki environment variables seperti yang tertera pada Dockerfile untuk konfigurasi db pada app.
 
-App reservasi terdapat pending selama saat dikarenakan pada main section terdapat statement sleep selama 20 detik. Sehingga kami hapus agak tidak ada delay saat boot app.
-
-#### [server.py](reservasi/server.py)
-
-```py
-from flask import request, jsonify, session, Flask, render_template, send_from_directory
-from flask.views import View
-
-import os
-
-import MySQLdb
-
-flask_app = Flask(__name__, template_folder='view', static_url_path='/static')
-
-db = None
-config = {}
-
-@flask_app.route("/")
-def hello():
-    hasil_query = []
-    try:
-        cur = db.cursor()
-
-        cur.execute("SELECT * FROM reservasi")
-
-        hasil_query = cur.fetchall()
-    except Exception as e:
-        pass
-
-    return render_template('index.html', data = hasil_query)
-
-def env_parser():
-    with open(".env") as file:
-        data = file.read()
-
-    config_parsers = data.split('\n')
-
-    for data_config in config_parsers:
-        data = data_config.split('=')
-        config[data[0]] = data[1]
-
-
-if __name__ == '__main__':
-
-    for i in range(0, 2):
-        try:
-            db = MySQLdb.connect(host=os.environ['DB_HOST'],    # your host, usually localhost
-                        user=os.environ['DB_USERNAME'],         # your username
-                        passwd=os.environ['DB_PASSWORD'],  # your password
-                        db=os.environ['DB_NAME'])
-            break
-        except Exception as e:
-            raise e
-            pass
-
-    flask_app.run(debug=True, host= '0.0.0.0', port=80)
-```
-
 Jalankan perintah:
 
 ```sh
 sudo docker build -t reservasi .
 ```
+
+![reservasi_build](assets/reservasi_build)
 
 ---
 
@@ -226,6 +170,11 @@ services:
             reservasi:
                 ipv4_address: 192.168.0.24
 ```
+
+Keterangan:
+
+- `volumes`:
+  container mysql akan meng-execute semua file sql yg berada pada direktori `/docker-entrypoint-initdb.d` secara berurutan (alphabetically). Sehingga dump database untuk app reservasi diletakkan di direktori tersebut.
 
 Tambahkan dependency workers terhadap db agak db di-load terlebih dahulu sebelum workers.
 
