@@ -51,7 +51,7 @@ Jalankan perintah:
 sudo docker build -t reservasi .
 ```
 
-![reservasi_build](assets/reservasi_build)
+![reservasi_build](assets/reservasi_build.png)
 
 ---
 
@@ -285,4 +285,4 @@ docker-compose up -d
 
 Buka `localhost:5000` pada browser.
 
-![reservasi_result](#assets/reservasi_result)
+![reservasi_result](assets/reservasi_result.png)
