@@ -5,7 +5,6 @@
 - [Penyelesaian](#penyelesaian)
   - [Nomor 1](#1)
     - [Dockerfile](#dockerfile)
-    - [server.py](#serverpy)
   - [Nomor 2](#2)
   - [Nomor 3](#3)
     - [balancer.conf](#balancerconf)
