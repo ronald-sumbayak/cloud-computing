@@ -5,8 +5,6 @@ import os
 
 import MySQLdb
 
-import time
-
 flask_app = Flask(__name__, template_folder='view', static_url_path='/static')
 
 db = None
@@ -40,7 +38,6 @@ def env_parser():
 if __name__ == '__main__':
 
     for i in range(0, 2):
-        time.sleep(20)
         try:
             db = MySQLdb.connect(host=os.environ['DB_HOST'],    # your host, usually localhost
                         user=os.environ['DB_USERNAME'],         # your username

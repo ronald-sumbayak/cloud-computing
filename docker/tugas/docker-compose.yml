@@ -1,15 +1,10 @@
-version: '3'
+version: '3.6'
 services:
     worker1:
         container_name: reservasi-worker1
         image: reservasi
         depends_on:
             - db
-        environment:
-            DB_HOST: 192.168.0.24
-            DB_NAME: reservasi
-            DB_USERNAME: userawan
-            DB_PASSWORD: buayakecil
         networks:
             reservasi:
                 ipv4_address: 192.168.0.21
@@ -18,11 +13,6 @@ services:
         image: reservasi
         depends_on:
             - db
-        environment:
-            DB_HOST: 192.168.0.24
-            DB_NAME: reservasi
-            DB_USERNAME: userawan
-            DB_PASSWORD: buayakecil
         networks:
             reservasi:
                 ipv4_address: 192.168.0.22
@@ -31,11 +21,6 @@ services:
         image: reservasi
         depends_on:
             - db
-        environment:
-            DB_HOST: 192.168.0.24
-            DB_NAME: reservasi
-            DB_USERNAME: userawan
-            DB_PASSWORD: buayakecil
         networks:
             reservasi:
                 ipv4_address: 192.168.0.23
@@ -43,12 +28,12 @@ services:
         container_name: reservasi-db
         image: mysql
         environment:
-            MYSQL_ROOT_PASSWORD: root
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
             MYSQL_DATABASE: reservasi
             MYSQL_USER: userawan
             MYSQL_PASSWORD: buayakecil
         volumes:
-            - ./.mysql_data:/var/lib/mysql
+            - reservasi:/var/lib/mysql
             - ./reservasi/reservasi.sql:/docker-entrypoint-initdb.d/reservasi.sql
         networks:
             reservasi:
