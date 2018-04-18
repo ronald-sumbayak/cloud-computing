@@ -4,25 +4,84 @@
 docker-compose up
 ```
 
-### E. Soal
+# 1
+1. Buat file [Dockerfile](../Dockerfile) pada folder reservasi `nano Dockerfile`
+2. Ketikkan perintah berikut :
+    ```Dockerfile
+    FROM ubuntu:16.04
+    RUN apt-get update && apt-get -y install python-pip libmysqlclient-dev
+    COPY reservasi /reservasi
+    WORKDIR /reservasi
+    RUN pip install -r requirements.txt
+    ENTRYPOINT ["python"]
+    CMD ["server.py"]
+    ```
+3. Simpan. Jalankan perintah `sudo docker build -t reservasi .`.
+4. Cek container dengan perintah `sudo docker ps`.
 
-#### [Peraturan]
-1. Laporan harus berupa Markdown.
-2. Tata cara pengerjaan silahkan lihat [Klik Disini](https://github.com/dzakybd/PKSJ_Tugas) sebagai pedoman bentuk sitematis laporan.
-3. Ikui apa yang diminta oleh soal, dan tidak diperbolehkan menginstall atau mensetup config melalui perintah docker exec -ti [ID Container] /bin/bash
+# 2
+Buat 3 buah worker dengan menggunakan image yang dibuat pada soal [1](#1).
+```yml
+services:
+    worker1:
+        image: reservasi
+    worker2:
+        image: reservasi
+    worker3:
+        image: reservasi
+```
 
-Nana adalah mahasiswa semester 6 dan sekarang sedang mengambil matakuliah komputasi awan. Saat mengambil matakuliah komputasi awan dia mendapatkan materi sesilab tentang Docker. Suatu hari Nana ingin membuat sistem reservasi lab menggunakan Python Flask. Dia dibantu temannya, Putra awalnya membuat web terlebih dahulu. Web dapat di download [disini](https://cloud.fathoniadi.my.id/reservasi.zip).
+# 3
+Tambahkan service untuk load balancer.
+```yml
+balancer:
+    image: nginx
+    depends_on:
+        - worker1
+        - worker2
+        - worker3
+    ports:
+        - 5000:80
+    volumes:
+        - ./balancer.conf:/etc/nginx/conf.d/default.conf
+```
+Keterangan:
+- `depends_on`
+  Balancer akan menunggu sampai semua worker sudah berjalan baru balancer dimulai.
+- `ports`
+  Port mapping dari port 80 container ke port 5000 host
+- `volumes`
+  Mount file [balancer.conf](balancer.conf) ke directory `/etc/nginx/conf.d` pada container dimana nginx akan meng-include config server.
 
-Setelah membuat web, Putra dan Nana membuat Custom Image Container menggunakan Dockerfile. Mereka membuat image container menggunakan base container ubuntu:16.04 kemudian menginstall aplikasi flask dan pendukungnya agar website dapat berjalan [1].
+Tambahkan docker networks pada compose file agar balancer dan workers berada pada satu network.
+```yml
+networks:
+    reservasi:
+        ipam:
+            config:
+                - subnet: 192.168.0.0/24
+```
 
-Setelah membuat custom image container, mereka kemudian membuat file __docker-compose.yml__. Dari custom image yang dibuat sebelumnya mereka membuat 3 node yaitu worker1, worker2, dan worker3 [2].
+Berikan static IP pada balancer dan workers.
+```yml
+services:
+    worker1:
+        networks:
+            reservasi:
+                ipv4_address: 192.168.0.21
+    worker2:
+        networks:
+            reservasi:
+                ipv4_address: 192.168.0.22
+    worker3:
+        networks:
+            reservasi:
+                ipv4_address: 192.168.0.23
+    balancer:
+        networks:
+            reservasi:
+                ipv4_address: 192.168.0.25
+```
 
-Setelah mempersiapkan worker, mereka kemudian menyiapkan nginx untuk loadbalancing ketiga worker tersebut (diperbolehkan menggunakan images container yang sudah jadi dan ada di Docker Hub) [3].
-
-Karena web mereka membutuhkan mysql sebagai database, terakhir mereka membuat container mysql (diperbolehkan menggunakan images container yang sudah jadi dan ada di Docker Hub)  yang dapat diakses oleh ke-3 worker yang berisi web mereka tadi dengan environment:
-
-    username : userawan
-    password : buayakecil
-    nama database : reservasi
-
-Selain setup environmet mysql, mereka juga mengimport dump database web mereka menggunakan Docker Compose dan tak lupa membuat volume agar storage mysql menjadi persisten[4].
+# 4
+### Nomer 4 belom v:
