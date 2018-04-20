@@ -1,2 +1,5 @@
 static/**/*.md
 static/**/*.html
+static/**/*.css
+!static/**/bootstrap.min.css
+
