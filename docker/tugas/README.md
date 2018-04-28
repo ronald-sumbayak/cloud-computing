@@ -31,8 +31,7 @@ docker-compose up -d
 FROM ubuntu:16.04
 RUN apt-get update && apt-get -y install python-pip libmysqlclient-dev
 RUN pip install --upgrade pip
-ENV DB_HOST=192.168.0.24 \
-    DB_NAME=reservasi \
+ENV DB_NAME=reservasi \
     DB_USERNAME=userawan \
     DB_PASSWORD=buayakecil
 COPY reservasi /reservasi
@@ -77,11 +76,16 @@ Tambahkan service untuk load balancer.
 ```yml
 services:
     balancer:
+        container_name: reservasi-balancer
         image: nginx
         depends_on:
             - worker1
             - worker2
             - worker3
+        links:
+             - worker1:worker1
+             - worker2:worker2
+             - worker3:worker3
         ports:
             - 5000:80
         volumes:
@@ -92,6 +96,8 @@ Keterangan:
 
 - `depends_on`
   Balancer akan menunggu sampai semua worker sudah berjalan baru balancer dimulai.
+- `links`
+  Memberikan alias dari setiap worker pada balancer.
 - `ports`
   Port mapping dari port 80 container ke port 5000 host
 - `volumes`
@@ -99,43 +105,13 @@ Keterangan:
 
 Tambahkan docker networks pada compose file agar balancer dan workers berada pada satu network.
 
-```yml
-networks:
-    reservasi:
-        ipam:
-            config:
-                - subnet: 192.168.0.0/24
-```
-
-Berikan static IP pada balancer dan workers.
-
-```yml
-services:
-    worker1:
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.21
-    worker2:
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.22
-    worker3:
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.23
-    balancer:
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.25
-```
-
 #### [balancer.conf](balancer.conf)
 
 ```nginx
 upstream workers {
-    server 192.168.0.21;
-    server 192.168.0.22;
-    server 192.168.0.23;
+    server worker1;
+    server worker2;
+    server worker3;
 }
 
 server {
@@ -165,9 +141,6 @@ services:
             MYSQL_PASSWORD: buayakecil
         volumes:
             - ./reservasi/reservasi.sql:/docker-entrypoint-initdb.d/reservasi.sql
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.24
 ```
 
 Keterangan:
@@ -218,25 +191,22 @@ services:
         image: reservasi
         depends_on:
             - db
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.21
+        environment:
+            DB_HOST: db
     worker2:
         container_name: reservasi-worker2
         image: reservasi
         depends_on:
             - db
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.22
+        environment:
+            DB_HOST: db
     worker3:
         container_name: reservasi-worker3
         image: reservasi
         depends_on:
             - db
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.23
+        environment:
+            DB_HOST: db
     db:
         container_name: reservasi-db
         image: mysql
@@ -248,9 +218,6 @@ services:
         volumes:
             - reservasi:/var/lib/mysql
             - ./reservasi/reservasi.sql:/docker-entrypoint-initdb.d/reservasi.sql
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.24
     balancer:
         container_name: reservasi-balancer
         image: nginx
@@ -258,20 +225,16 @@ services:
             - worker1
             - worker2
             - worker3
+        links:
+             - worker1:worker1
+             - worker2:worker2
+             - worker3:worker3
         ports:
             - 5000:80
         volumes:
             - ./balancer.conf:/etc/nginx/conf.d/default.conf
-        networks:
-            reservasi:
-                ipv4_address: 192.168.0.25
 volumes:
     reservasi:
-networks:
-    reservasi:
-        ipam:
-            config:
-                - subnet: 192.168.0.0/24
 ```
 
 ### Test
