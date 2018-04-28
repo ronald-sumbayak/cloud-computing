@@ -1,15 +1,30 @@
-## Load Balancing with Nginx
+# Load Balancing with Nginx
+
 - [Soal](..)
 - [Nomor 1](#1)
+  - [Setup](#setup)
+  - [How to Use](#tldr-how-to-use)
+  - [Configuration](#configuration)
+    - [Balancer](#balancer)
+    - [Workers](#workers)
+  - [load_balancing](#load_balancing)
+    - [start](#start)
+    - [method](#method)
+    - [destroy](#destroy)
 - [Nomor 2](#2)
+  - [Round Robin](#round-robin)
+  - [Least Connection](#least-connection)
+  - [IP Hash](#ip-hash)
 - [Nomor 3](#3)
 
 ---
 
-#### 1
+## 1
+
 **Buatlah Vagrantfile sekaligus provisioning-nya untuk menyelesaikan kasus.**
 
-## Setup
+### Setup
+
 - [Balancer](#balancer)
   - Box: [ubuntu/xenial64](https://app.vagrantup.com/ubuntu/boxes/xenial64)
   - IP: 192.168.0.2
@@ -25,11 +40,12 @@
     - [Worker 2](workers/worker2/Vagrantfile)
   - [Provision](workers/bootstrap.sh)
 
-## TL;DR: How to Use
+### TL;DR: How to Use
 
 > Note: All features will work in assumes that the environments for balancer and workers are created by using the `load_balancing` and no commands entered directly into guest machine (no ssh required).
 
-### Startup
+#### Startup
+
 ```sh
 ./load_balancing start [balancing_method]
 ```
@@ -37,14 +53,17 @@
 > Balancing method can be between **round_robin**, **ip_hash**, or **least_conn**.
 
 Example:
+
 ```sh
 ./load_balancing start round_robin
 ./load_balancing start ip_hash
 ./load_balancing start least_conn
 ```
 
-### Change Balancing Method
+#### Change Balancing Method
+
 To change current balancing method, run:
+
 ```sh
 ./load_balancing method [balancing_method]
 ```
@@ -54,21 +73,25 @@ To change current balancing method, run:
 Then reload the balancer machine.
 
 Example
+
 ```sh
 ./load_balancing method round_robin
 ./load_balancing method ip_hash
 ./load_balancing method least_conn
 ```
 
-### Destroy
+#### Destroy
+
 To destroy currently active balancer and workers:
+
 ```sh
 ./load_balancing destroy
 ```
 
-## Configuration
+### Configuration
 
-### Balancer
+#### Balancer
+
 Balancer menggunakan konfigurasi vagrant sebagai berikut:
 
 ```ruby
@@ -102,7 +125,8 @@ Provision akan meng-install nginx. Setelah itu me-link konfigurasi nginx (`balan
 
 > konfigurasi yang berada pada folder `/vagrant` adalah konfigurasi yang dipilih saat melakukan startup dengan executable `load_balancing`. ([more](#load_balancing))
 
-### Workers
+#### Workers
+
 Setiap worker menggunakan konfigurasi vagrant sebagai berikut, dengan perbedaan pada ip yang digunakan:
 
 ```ruby
@@ -129,10 +153,12 @@ sudo apt-get -y install apache2
 
 Dimana provisioning akan meng-install apache2 pada worker tanpa ada perubahan, sehingga worker akan men-serve Apache2 Ubuntu Default Page.
 
-## load_balancing
+### load_balancing
+
 `load_balancing` berisi script untuk meng-automasi proses startup, destroy, dan penggantian algoritma/method untuk load balancing pada balancer.
 
-### Startup
+#### start
+
 ```sh
 ./load_balancing start [balancing_method]
 ```
@@ -144,16 +170,17 @@ Kemudian menjalankan perintah `vagrant up` pada directory balancer dan workers.
 Ada 3 method yang bisa dipilih, yaitu: **round_robin**, **ip_hash**, dan **least_conn**. Berikut masing-masing file konfigurasinya:
 
 - round_robin:
+
   ```nginx
   upstream workers {
       server 192.168.0.3;
       server 192.168.0.4;
   }
-  
+
   server {
       listen 80 default_server;
       listen [::]:80 default_server ipv6only=on;
-      
+
       location / {
           proxy_pass http://workers;
       }
@@ -161,17 +188,18 @@ Ada 3 method yang bisa dipilih, yaitu: **round_robin**, **ip_hash**, dan **least
   ```
 
 - ip_hash:
+
   ```nginx
   upstream workers {
       ip_hash;
       server 192.168.0.3;
       server 192.168.0.4;
   }
-  
+
   server {
       listen 80 default_server;
       listen [::]:80 default_server ipv6only=on;
-      
+
       location / {
           proxy_pass http://workers;
       }
@@ -179,24 +207,26 @@ Ada 3 method yang bisa dipilih, yaitu: **round_robin**, **ip_hash**, dan **least
   ```
 
 - least_conn:
+
   ```nginx
   upstream workers {
       least_conn;
       server 192.168.0.3;
       server 192.168.0.4;
   }
-  
+
   server {
       listen 80 default_server;
       listen [::]:80 default_server ipv6only=on;
-      
+
       location / {
           proxy_pass http://workers;
       }
   }
   ```
 
-### Change Balancing Method
+#### method
+
 ```sh
 ./load_balancing method [balancing_method]
 ```
@@ -205,7 +235,8 @@ Perintah `method` akan meng-copy konfigurasi nginx pada directory [balancer/meth
 
 Karena file `balancer.conf` di-link ke directory `/etc/nginx/sites-enabled/balancer.conf`, maka file pada directory `/etc/nginx/sites-enabled/balancer.conf` juga akan otomatis berubah, sehingga hanya perlu me-restart service nginx atau me-reload machine balancer.
 
-### Destroy
+#### destroy
+
 ```sh
 ./load_balancing destroy
 ```
@@ -214,25 +245,30 @@ Perintah `destroy` akan menjalankan perintah `vagrant destroy --force` pada dire
 
 ---
 
-#### 2
+## 2
+
 **Analisa apa perbedaan antara ketiga algoritma tersebut.**
 
 ### Round Robin
+
 Membagi beban kerja secara berurutan dari satu server ke server lainnya. Konsep dasar dari algoritma ini adalah time sharing, yaitu membagikan beban kerja sesuai dengan antrian.
-  
+
 Misal ada 3 server yaitu A, B, C. Maka beban kerja akan dibagikan pada server A, lalu server B, selanjutnya server C, kembali lagi ke server A, dan begitu seterusnya sampai beban kerja habis dibagikan.
 
 ### Least Connection
+
 Membagi beban kerja berdasarkan banyaknya koneksi yang sedang dilayani oleh sebuah server yang aktif. Algoritma penjadwalan ini termasuk dalam penjadwalan dinamik, dimana memerlukan perhitungan koneksi yang aktif untuk masing-masing real server. Algoritma ini baik digunakan untuk jaringan internet yang memerlukan throughput maksimal. Metode penjadwalan ini juga baik digunakan untuk melancarkan pendistribusian ketika request yang datang banyak.
 
 Misal, ada 2 server yaitu A dan B. Koneksi aktif pada server A berjumlah 2 koneksi, sedangkan koneksi aktif pada server B berjumlah 1 koneksi, maka beban kerja akan diberikan kepada server B karena koneksi aktif server B lebih sedikit dibanding dengan server A.
 
 ### IP Hash
+
 Menggunakan IP source dan destination dari klien dan server untuk men-generate hash key menjadi kode unik. Kode ini digunakan untuk mengalokasikan klien ke server tertentu. Metode ini dapat memastikan bahwa klien akan terhubung dengan server yang sama yang sebelumnya sudah terhubung. Metode ini sangat berguna untuk klien yang harus terhubung ke session yang masih aktif setelah terjadi diskoneksi atau rekoneksi.
 
 ---
 
-#### 3
+## 3
+
 **Bagaimana mengatasi masalah session ketika kita melakukan load balancing?**
 
 Dalam load balancing, dikenal sebuah metode/algoritma bernama Sticky Session. Pada sticky session, setelah session cookie telah dikeluarkan atau terbentuk, load balancer akan selalu mengarahkan permintaan dari klien yang terkait ke session, ke server yang sama tanpa mencari server baru lagi. Hal ini memungkinkan kita untuk menyimpan simpanan di sistem file lokal tanpa perlu sistem file yang dipakai bersama.

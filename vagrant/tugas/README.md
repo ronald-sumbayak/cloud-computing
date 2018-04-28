@@ -1,4 +1,5 @@
-## Vagrant
+# Vagrant
+
 - [Soal](..)
 - [Nomor 1](#1)
 - [Nomor 2](#2)
@@ -6,11 +7,13 @@
 - [Nomor 4](#4)
 
 ## Setup
+
 - Box: [ubuntu/xenial64](https://app.vagrantup.com/ubuntu/boxes/xenial64)
 - [Vagrantfile](#vagrantfile)
 - [Provision](bootstrap.sh)
 
-#### [Vagrantfile](Vagrantfile)
+### [Vagrantfile](Vagrantfile)
+
 ```ruby
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
@@ -38,8 +41,9 @@ end
 
 ---
 
-#### 1
-**Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'**
+### 1
+
+**Buat vagrant virtualbox dan buat user 'awan' dengan password 'buayakecil'**.
 
 Menggunakan command useradd. Opsi -p akan menerima text password yang harus sudah di-hash. Opsi -d menentukan home directory dari user yang akan dibuat (default `/` jika tidak di-set)
 
@@ -56,8 +60,9 @@ did it work?
 
 ---
 
-#### 2
-**Buat vagrant virtualbox dan lakukan provisioning install Phoenix Web Framework**
+### 2
+
+**Buat vagrant virtualbox dan lakukan provisioning install Phoenix Web Framework**.
 
 Beberapa packages memerlukan config locale menggunakan UTF-8. Hal itu bisa dilakukan dengan:
 
@@ -67,7 +72,7 @@ export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 sudo locale-gen en_US.UTF-8
 ```
- 
+
 Phoenix Web Framework ditulis menggunakan bahasa Elixir. Maka harus menginstall Elixir terlebih dahulu:
 
 ```sh
@@ -144,8 +149,9 @@ config.vm.network 'forwarded_port', guest: 4000, host: 12000
 
 ---
 
-#### 3
-**Buat vagrant virtualbox dan lakukan provisioning install: php, mysql, composer, nginx**
+### 3
+
+**Buat vagrant virtualbox dan lakukan provisioning install: php, mysql, composer, nginx**.
 
 Install PHP (+ekstensi untuk Laravel)
 
@@ -248,8 +254,9 @@ config.vm.network 'forwarded_port', guest: 80, host: 8080
 
 ---
 
-#### 4
-**Buat vagrant virtualbox dan lakukan provisioning install: squid-proxy, bind9**
+### 4
+
+**Buat vagrant virtualbox dan lakukan provisioning install: squid-proxy, bind9**.
 
 ```sh
 # install squid-proxy
