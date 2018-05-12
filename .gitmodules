@@ -1,3 +1,6 @@
 [submodule "vagrant/tugas/pelatihan-laravel"]
 	path = vagrant/tugas/pelatihan-laravel
 	url = https://github.com/fathoniadi/pelatihan-laravel
+[submodule "ansible/tugas/Hackathon"]
+	path = ansible/tugas/Hackathon
+	url = https://github.com/udinIMM/Hackathon
