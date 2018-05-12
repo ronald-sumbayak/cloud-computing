@@ -1,0 +1,5 @@
+- name: Migrate
+  become: yes
+  shell: php artisan migrate
+  args:
+    chdir: /var/www/Hackathon
