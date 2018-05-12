@@ -1,0 +1,6 @@
+[db]
+10.11.1.2 ansible_user=vagrant
+
+[workers]
+10.11.1.3 ansible_user=vagrant
+10.11.1.4 ansible_user=vagrant
