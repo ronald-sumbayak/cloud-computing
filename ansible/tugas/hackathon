@@ -1,0 +1,24 @@
+# remove existing known_hosts
+rm ~/.ssh/known_hosts
+
+cd vms
+
+# remove existing virtual machines
+./boot_vms destroy --force
+
+# boot virtual machines
+./boot_vms up
+
+cd ..
+
+# temporarily disable host key checking
+export ANSIBLE_HOST_KEY_CHECKING=False
+
+# test remote hosts
+ansible all -i hosts -m ping
+
+# restore host key checking
+export ANSIBLE_HOST_KEY_CHECKING=True
+
+# play book
+ansible-playbook site.yml -i hosts
