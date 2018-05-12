@@ -1,0 +1,39 @@
+- name: Install git
+  become: yes
+  apt:
+    name: git
+    update_cache: yes
+
+- name: Clone project
+  become: yes
+  git:
+    repo: https://github.com/udinIMM/Hackathon
+    dest: /var/www/Hackathon
+
+- name: Copy laravel env file
+  become: yes
+  template:
+    src: .env
+    dest: /var/www/Hackathon/.env
+
+- name: Change storage/ and bootstrap/cache/ permission
+  become: yes
+  file:
+    path: "{{ item }}"
+    mode: 0777
+    recurse: yes
+  with_items:
+    - /var/www/Hackathon/storage
+    - /var/www/Hackathon/bootstrap/cache
+
+- name: Install project dependencies
+  become: yes
+  composer:
+    command: install
+    working_dir: /var/www/Hackathon
+
+- name: Generate key
+  become: yes
+  shell: php artisan key:generate
+  args:
+    chdir: /var/www/Hackathon

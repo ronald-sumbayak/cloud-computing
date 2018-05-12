@@ -1,0 +1,23 @@
+- name: Install nginx
+  become: yes
+  apt:
+    name: nginx
+    update_cache: yes
+
+- name: Remove default nginx configuration file
+  become: yes
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Copy nginx configuration file
+  become: yes
+  template:
+    src: hackathon.conf
+    dest: /etc/nginx/sites-enabled/hackathon.conf
+
+- name: Restart service nginx
+  become: yes
+  service:
+    name: nginx
+    state: restarted

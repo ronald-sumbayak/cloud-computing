@@ -1,0 +1,28 @@
+- name: Add ppa:ondrej/php for PHP7.2
+  become: yes
+  apt_repository:
+    repo: ppa:ondrej/php
+
+- name: Install required PHP modules
+  become: yes
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - php7.2
+    - php7.2-fpm
+    - php7.2-cgi
+    - php7.2-common
+    - php7.2-mysql
+    - php7.2-mbstring
+    - php7.2-xml
+    - php7.2-zip
+    - composer
+    - zip
+    - unzip
+
+- name: Start service php7.2-fpm
+  become: yes
+  service:
+    name: php7.2-fpm
+    state: started
