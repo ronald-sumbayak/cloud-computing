@@ -1,0 +1,35 @@
+- name: Install mysql
+  become: yes
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - mysql-server
+    - python-mysqldb
+
+- name: Copy mysql configuration file
+  become: yes
+  template:
+    src: my.cnf
+    dest: /etc/mysql/mariadb.conf.d/my.cnf
+
+- name: restart service mysql
+  become: yes
+  systemd:
+    name: mysql
+    state: restarted
+
+- name: Create user regal
+  become: yes
+  mysql_user:
+    name: regal
+    password: bolaubi
+    host: '%'
+    priv: '*.*:ALL'
+
+- name: Create database hackathon
+  become: yes
+  mysql_db:
+    name: hackathon
+    encoding: utf8mb4
+    collation: utf8mb4_unicode_ci
