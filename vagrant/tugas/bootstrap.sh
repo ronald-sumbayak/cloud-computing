@@ -63,14 +63,11 @@ mix ecto.create
 ####################################################################################################
 # 3. Buat vagrant virtualbox dan lakukan provisioning install: php, mysql, composer, nginx
 
-# install php
+# install php (and required modules)
 sudo apt-get -y install python-software-properties software-properties-common
 sudo apt-add-repository -y ppa:ondrej/php
 sudo apt-get update
-sudo apt-get -y install php7.2
-sudo apt-get -y install php7.2-fpm php7.2-cgi
-sudo apt-get -y install php7.2-common php7.2-mysql php7.2-mbstring php7.2-xml
-sudo apt-get -y install zip unzip
+sudo apt-get -y install php7.2 php7.2-fpm php7.2-cgi php7.2-common php7.2-mysql php7.2-mbstring php7.2-xml php7.2-zip
 
 # install mysql
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
@@ -85,17 +82,26 @@ composer global require "laravel/installer"
 # install nginx
 sudo apt-get -y --purge remove apache2
 sudo apt-get -y install nginx
-
 sudo rm -f /etc/nginx/sites-enabled/*
 sudo ln -s /vagrant/pelatihan-laravel.conf /etc/nginx/sites-enabled
 sudo nginx -t
 sudo service php7.2-fpm start
 sudo service nginx restart
 
-# config project
-cd /var/www/web
-cp .env.example .env
+# clone project
+sudo apt-get -y install git
+cd /var/www
+git clone https://github.com/fathoniadi/pelatihan-laravel
+mv -T pelatihan-laravel web
+
+# install project dependencies
+sudo apt-get -y install composer zip unzip
+cd web
 composer install
+
+# finishing
+sudo chmod -R 777 storage bootstrap/cache
+cp .env.example .env
 php artisan key:generate
 
 ####################################################################################################
