@@ -7,7 +7,6 @@
   become: yes
   apt:
     name: "{{ item }}"
-    update_cache: yes
   with_items:
     - php7.2
     - php7.2-fpm
