@@ -5,6 +5,7 @@ vagrant $1 $2
 cd ..
 
 cd workers
+
 cd worker1
 vagrant $1 $2
 cd ..
