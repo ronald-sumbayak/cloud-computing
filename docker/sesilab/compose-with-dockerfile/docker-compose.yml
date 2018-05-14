@@ -1,9 +1,9 @@
-version: '3.3'
+version: '3.6'
 services:
-    ubuntu-cloud:
-        build:
-            context: ./
-        ports:
-            - '9001:80'
-        volumes:
-            - ./www:/var/www/html
+  ubuntu-cloud:
+    build:
+      context: ./
+    ports:
+      - '9001:80'
+    volumes:
+      - ./www:/var/www/html
