@@ -1,0 +1,7 @@
+cd worker1
+vagrant $1 $2
+cd ..
+
+cd worker2
+vagrant $1 $2
+cd ..

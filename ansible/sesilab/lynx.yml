@@ -1,0 +1,9 @@
+- hosts: workers
+  tasks:
+    - name: Install lynx
+      become: yes #untuk menjadi superuser
+      apt:
+        name: "{{ item }}"
+        update_cache: yes
+      with_items:
+        - lynx
