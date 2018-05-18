@@ -33,7 +33,7 @@ Jika status yang dihasilkan "SUCCESS" pada semua VM, maka berhasil.
 ---
 ### 3
 Lihat pada worker1 10.11.1.3
-![result3](tugas/assets/result3.png)
+![result3](assets/result3.png)
 
 Lihat pada worker2 10.11.1.4
-![result4](tugas/assets/result4.png)
+![result4](assets/result4.png)
