@@ -1,0 +1,6 @@
+source /etc/network/interfaces.d/*.cfg
+auto enp0s3
+iface enp0s3 inet static
+address 10.151.31.47
+netmask 255.255.255.0
+gateway 10.151.31.41
