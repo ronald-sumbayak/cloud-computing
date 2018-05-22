@@ -10,4 +10,5 @@ $TTL	604800
 			 604800 )	; Negative Cache TTL
 ;
 @	IN	NS	tcodenote.com.
+@	IN	A	10.11.12.2
 *	IN	A	10.11.12.2
