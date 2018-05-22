@@ -12,9 +12,7 @@
 - [Docker] ([Tugas][Docker Tugas])
 - [Ansible] ([Tugas][Ansible Tugas])
 
-## Final Project
-
-- [FP]
+## [Final Project]
 
 [Hania Maghfira]: https://github.com/hmaghfira
 [Ronald Andrean]: https://github.com/ronaldsumbayak
