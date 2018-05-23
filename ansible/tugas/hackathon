@@ -1,14 +1,9 @@
 # remove existing known_hosts
 rm ~/.ssh/known_hosts
 
-cd vms
-
-# remove existing virtual machines
-./boot_vms destroy --force
-
 # boot virtual machines
-./boot_vms up
-
+cd vms
+./boot_vms
 cd ..
 
 # temporarily disable host key checking

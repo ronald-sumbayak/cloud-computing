@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 
-cd db
-vagrant $1 $2
-cd ..
+CWD=`pwd`
 
-cd workers
+boot () {
+    cd $1
+    vagrant destroy --force && vagrant up
+    cd $CWD
+}
 
-cd worker1
-vagrant $1 $2
-cd ..
+vms=(db workers/worker1 workers/worker2)
 
-cd worker2
-vagrant $1 $2
-cd ..
-
-cd ..
+for vm in ${vms[*]}; do
+    boot $vm
+done
