@@ -1,5 +1,5 @@
 <?php
-$connect=mysqli_connect('localhost','root','suk4suk44dm1n@lab','cloud');
+$connect=mysqli_connect('localhost','cloud','cloud','tekankata');
 
 if(mysqli_connect_errno($connect))
 {

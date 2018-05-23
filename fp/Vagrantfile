@@ -4,12 +4,12 @@
 Vagrant.configure('2') do |config|
   config.vm.box = 'ubuntu/xenial64'
   config.vm.box_check_update = false
-  config.vm.network 'private_network', ip: 'IP'
-  config.vm.provision 'shell', path: '../../.template/bootstrap.sh'
+  config.vm.network 'private_network', ip: '10.11.12.13'
+  config.vm.synced_folder "web", "/var/www/tekankata"
 
   config.vm.provider 'virtualbox' do |vb|
-    vb.name = 'USERNAME.tekankata.com'
-    vb.memory = 512
+    vb.name = 'Tekankata'
+    vb.memory = 2048
     vb.cpus = 1
   end
 end
