@@ -41,9 +41,9 @@ ln -s /vagrant/tekankata.conf /etc/nginx/sites-enabled
 service nginx restart
 service php7.2-fpm start
 
-# config bind9
+# install bind9
 apt-get -y install bind9
-cp -f /vagrant/named.conf.local /etc/bind/tekankata
+cp -f /vagrant/named.conf.local /etc/bind
 mkdir /etc/bind/tekankata
 cp -f /vagrant/tekankata.com /etc/bind/tekankata
 service bind9 restart
@@ -52,7 +52,7 @@ service bind9 restart
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
 sudo apt-get -y install mysql-server libmysqlclient-dev
-mysql -u root -proot -e /vagrant/tekankata.sql
+mysql -u root -proot < /vagrant/tekankata.sql
 
 # install mysql connector for python
 apt-get -y install python python-pip
