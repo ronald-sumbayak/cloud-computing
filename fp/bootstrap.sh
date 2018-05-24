@@ -46,6 +46,7 @@ apt-get -y install bind9
 cp -f /vagrant/named.conf.local /etc/bind
 mkdir /etc/bind/tekankata
 cp -f /vagrant/tekankata.com /etc/bind/tekankata
+chmod 777 -R /etc/bind/tekankata
 service bind9 restart
 
 # install mysql
