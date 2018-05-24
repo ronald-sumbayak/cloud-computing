@@ -21,7 +21,6 @@
     - [Clone Project](#clone-project)
     - [Setup Database](#detup-database)
   - [Nomor 5](#5)
-
     - [hackathon.conf](#hackathonconf)
   - [Test](#test)
   - [Result](#result)
@@ -67,7 +66,7 @@
 
 Ketiga vm dibuat menggunakan vagrant.
 
-#### DB
+#### [DB](vms/db/Vagrantfile)
 
 ```rb
 # -*- mode: ruby -*-
