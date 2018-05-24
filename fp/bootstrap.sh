@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+locale-gen en_US.UTF-8
+
 apt-get update
 service apache2 stop
 apt-get -y install vagrant virtualbox
