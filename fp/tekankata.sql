@@ -1,4 +1,3 @@
-DROP DATABASE IF EXISTS tekankata;
 CREATE DATABASE tekankata;
 GRANT ALL PRIVILEGES ON *.* TO 'cloud'@'localhost' IDENTIFIED BY 'cloud';
 USE tekankata;

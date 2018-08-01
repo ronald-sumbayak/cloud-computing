@@ -1,0 +1,4 @@
+zone "tekankata.com" {
+    type master;
+    file "/etc/bind/tekankata/tekankata.com";
+};

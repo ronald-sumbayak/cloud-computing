@@ -1,2 +1,2 @@
 * * * * * service bind9 restart
-* * * * * python /vagrant/fetch_subdomain.py
+* * * * * cd /vagrant/redzones && python /vagrant/redzones/fetch_subdomain.py

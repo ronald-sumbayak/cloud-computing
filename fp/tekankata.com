@@ -10,6 +10,4 @@ $TTL	604800
 			 604800 )	; Negative Cache TTL
 ;
 @	IN	NS	tekankata.com.
-@       IN      A       10.11.12.13
-coba	IN	A	10.11.12.100
-coba	IN	A	10.11.12.100
+@       IN      A       11.12.13.14
